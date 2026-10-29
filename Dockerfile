@@ -16,6 +16,13 @@ COPY cmd/ cmd/
 COPY api/ api/
 COPY internal/ internal/
 
+# Run tests before building
+COPY Makefile Makefile
+COPY hack/ hack/
+COPY config/ config/
+COPY test/ test/
+RUN make test
+
 # Build
 # VCF Migration Operator only supports x86_64 architecture
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -p=4 -o manager cmd/main.go
