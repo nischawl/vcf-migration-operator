@@ -167,6 +167,21 @@ spec:
       workspace: git-auth
     - name: netrc
       workspace: netrc
+  - name: run-tests
+    params:
+    - name: SOURCE_ARTIFACT
+      value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
+    runAfter:
+    - prefetch-dependencies
+    taskRef:
+      params:
+      - name: name
+        value: golang-test
+      - name: bundle
+        value: quay.io/konflux-ci/tekton-catalog/task-golang-test:0.2@sha256:1b731b49290b054d0739e2856a68efc6e9d8e929d8ff70a77b9f85e28e33f570
+      - name: kind
+        value: task
+      resolver: bundles
   - name: build-container
     params:
     - name: IMAGE
@@ -209,7 +224,7 @@ spec:
     - name: OMIT_HISTORY
       value: $(params.omit-history)
     runAfter:
-    - prefetch-dependencies
+    - run-tests
     taskRef:
       params:
       - name: name
